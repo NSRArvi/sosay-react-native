@@ -2,15 +2,15 @@
   "expo": {
     "name": "Sosay",
     "slug": "Sosay",
-    "version": "1.0.0",
+    "version": "1.0.3",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/sosay-logo.png",
     "scheme": "sosay",
     "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.sosay.app",
-      "icon": "./assets/images/icon.png",
+      "icon": "./assets/images/sosay-logo.png",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }

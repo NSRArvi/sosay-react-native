@@ -1,10 +1,31 @@
-import { Platform, StyleSheet, View } from "react-native";
+import { Platform, StyleSheet, View, BackHandler } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { WebView } from "react-native-webview";
+import { useRef, useState, useEffect } from "react";
 
 export default function HomeScreen() {
   // Get dynamic hardware insets (top, bottom, left, right)
   const insets = useSafeAreaInsets();
+  const webViewRef = useRef<WebView>(null);
+  const canGoBackRef = useRef(false);
+
+  useEffect(() => {
+    if (Platform.OS === "android") {
+      const onBackPress = () => {
+        if (canGoBackRef.current && webViewRef.current) {
+          webViewRef.current.goBack();
+          return true; // Prevent default behavior (closing the app)
+        }
+        return false; // Allow default behavior
+      };
+
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+
+      return () => {
+        BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+      };
+    }
+  }, []);
 
   if (Platform.OS === "web") {
     return (
@@ -27,7 +48,15 @@ export default function HomeScreen() {
         },
       ]}
     >
-      <WebView source={{ uri: "https://sosay.org/" }} style={styles.webview} />
+      <WebView
+        ref={webViewRef}
+        source={{ uri: "https://sosay.org/" }}
+        style={styles.webview}
+        onNavigationStateChange={(navState) => {
+          canGoBackRef.current = navState.canGoBack;
+        }}
+        allowsBackForwardNavigationGestures={true}
+      />
     </View>
   );
 }
